@@ -5,12 +5,16 @@ import os
 from langchain import OpenAI
 from langchain.document_loaders import DirectoryLoader
 
-from langchain.llms import OpenAI
+from google.cloud import aiplatform
+
+# from langchain.llms import OpenAI
+from langchain.llms import VertexAI
 import looker_sdk
 from indexer import Indexer
 from looker_query_runner import LookerQueryRunner
 
 from query_converter import QueryConverter
+
 
 sdk = looker_sdk.init40("looker.ini")
 model_name = os.environ.get("LOOKER_MODEL_NAME")
@@ -20,7 +24,9 @@ lookml_dir = os.environ.get("LOOKML_DIR")
 if model_name is None or lookml_dir is None:
     raise Exception("Please set LOOKER_MODEL_NAME and LOOKML_DIR")
 
-llm = OpenAI(model_name="text-davinci-003", temperature=0)
+aiplatform.init(project="cloud-llm-preview1", location="us-central1")
+llm = VertexAI()
+# llm = OpenAI(model_name="text-davinci-003", temperature=0)
 
 
 @st.cache_resource
@@ -39,9 +45,10 @@ query_converter = QueryConverter(model_name, docsearch, llm)
 looker_query_runner = LookerQueryRunner(sdk)
 
 # This example shows how to make a simple question in natural language and get the result back from the Looker API.
-st.title("GPT + Looker")
+st.title("Palm2 + Looker")
 
-text = "Show me latest 10 pets."
+text = "Show me a list of the names and id of the products."
+
 question = st.text_area("question", placeholder=text)
 
 if st.button("Send"):

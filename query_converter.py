@@ -3,13 +3,41 @@ import json
 from webbrowser import Chrome
 from langchain import PromptTemplate
 from langchain.chains import RetrievalQA
-from langchain.schema import BaseLanguageModel
+from langchain.base_language import BaseLanguageModel
 
 
 class QueryConverter:
     def prompt_template(self):
         prompt_template = """
-        Given an input question, first create a syntactically correct JSON. The JSON is Looker SDK's run_inline_query function's models.WriteQuery argument. Do not use "fields": ["*"] in the JSON. Field names must include the view name. For example, fields: ["pet.id"]. The JSON must include the view name. For example, "view": "pet".
+        Given an input question, first create a syntactically correct JSON.
+        The JSON is Looker SDK's run_inline_query function's models.WriteQuery argument. 
+        Do not use "fields": ["*"] in the JSON. 
+        Field names must include the view name. The JSON must include the view name.
+        Must include the fields so that data is retrieved.
+        Use the explore keys in the model file as the view names.
+
+        Example:
+        Given a question: Give me a list of products with their ids and names
+        you should reply:
+        {{
+            "view": "order_items",
+            "fields": [
+                "products.id",
+                "products.name"
+            ],
+            "model": "thelook_bq"
+        }}
+
+        Given a question: Give me a list of products
+        you should reply:
+        {{
+            "view": "order_items",
+            "fields": [
+                "products.id",
+                "products.name"
+            ],
+            "model": "thelook_bq"
+        }}
 
         # LookML Reference
 
