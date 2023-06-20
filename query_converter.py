@@ -5,16 +5,14 @@ from langchain import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.base_language import BaseLanguageModel
 
-
 class QueryConverter:
     def prompt_template(self):
         prompt_template = """
         Given an input question, first create a syntactically correct JSON.
-        The JSON is Looker SDK's run_inline_query function's models.WriteQuery argument. 
         Do not use "fields": ["*"] in the JSON. 
         Field names must include the view name. The JSON must include the view name.
         Must include the fields so that data is retrieved.
-        Use the explore keys in the model file as the view names.
+        Use only the explore name as the name of the view in the query, where the expore names are those after 'explore: '
 
         Example:
         Given a question: Give me a list of products with their ids and names
@@ -28,13 +26,32 @@ class QueryConverter:
             "model": "thelook_bq"
         }}
 
-        Given a question: Give me a list of products
+        Given a question: show me the first purchase count and the user age group
         you should reply:
         {{
             "view": "order_items",
             "fields": [
-                "products.id",
-                "products.name"
+                "users.age",
+                "order_items.first_purchase_count"
+            ],
+            "model": "thelook_bq"
+        }}
+
+        Given a question: Sum of total sale price per day over the previous 7 days
+        {{
+            "view": "order_items",
+            "fields": [
+                "order_items.total_sale_price",
+                "orders.created_date"
+            ],
+            "filters": {{
+                "orders.created_date": "last 7 days"
+            }},
+            "aggregations": [
+                {{
+                    "type": "sum",
+                    "field": "order_items.total_sale_price"
+                }}
             ],
             "model": "thelook_bq"
         }}
