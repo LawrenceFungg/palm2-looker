@@ -139,3 +139,5 @@ cython_debug/
 
 looker.ini
 test_chart_recommender.py
+
+launch.json

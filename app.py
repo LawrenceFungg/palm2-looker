@@ -5,8 +5,9 @@ import streamlit.components.v1 as components
 import os
 from time import sleep
 from langchain.document_loaders import DirectoryLoader
+from dotenv import load_dotenv
 
-from google.cloud import aiplatform
+import vertexai
 
 # from langchain.llms import OpenAI
 from langchain.llms import VertexAI
@@ -18,14 +19,20 @@ from query_converter import QueryConverter
 from looker_look_creator import LookerLookCreator
 
 sdk = looker_sdk.init40("looker.ini")
-model_name = os.environ.get("LOOKER_MODEL_NAME")
-lookml_dir = os.environ.get("LOOKML_DIR")
+
+# Load .env file before looking at environment variables
+load_dotenv()
+model_name = os.getenv("LOOKER_MODEL_NAME")
+lookml_dir = os.getenv("LOOKML_DIR")
+project_id = os.getenv("PROJECT_ID") or "cloud-llm-preview1"
 
 # error if the model name and lookml_dir is not set
 if model_name is None or lookml_dir is None:
     raise Exception("Please set LOOKER_MODEL_NAME and LOOKML_DIR")
 
-aiplatform.init(project="cloud-llm-preview1", location="us-central1")
+# TODO: These 2 init params are currently useless due to a bug in SDK, where ADC is always taking precendence.
+vertexai.init(project=project_id, location="us-central1")
+
 llm = VertexAI(max_output_tokens=1024)
 # llm = OpenAI(model_name="text-davinci-003", temperature=0)
 
@@ -47,7 +54,7 @@ looker_look_creator = LookerLookCreator(sdk)
 available_chart_types = ['looker_column' ,'looker_bar','looker_line','looker_scatter','looker_area','looker_pie','single_value','looker_grid']
 
 # This example shows how to make a simple question in natural language and get the result back from the Looker API.
-looker_app_title = os.environ.get("LOOKER_APP_TITLE")
+looker_app_title = os.getenv("LOOKER_APP_TITLE")
 
 # error if the app name is not set
 if looker_app_title is None:
