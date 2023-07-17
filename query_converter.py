@@ -12,7 +12,7 @@ class QueryConverter:
         Do not use "fields": ["*"] in the JSON. 
         Field names must include the view name. The JSON must include the view name.
         Must include the fields so that data is retrieved.
-        Use only the explore name as the name of the view in the query, where the expore names are those after 'explore: '
+        Use only the explore name as the name of the view in the query, where the explore names are those after 'explore: '
 
         Example:
         Given a question: Give me a list of products with their ids and names
@@ -22,17 +22,6 @@ class QueryConverter:
             "fields": [
                 "products.id",
                 "products.name"
-            ],
-            "model": "thelook_bq"
-        }}
-
-        Given a question: show me the first purchase count and the user age group
-        you should reply:
-        {{
-            "view": "order_items",
-            "fields": [
-                "users.age",
-                "order_items.first_purchase_count"
             ],
             "model": "thelook_bq"
         }}
@@ -57,7 +46,6 @@ class QueryConverter:
         }}
 
         # LookML Reference
-
         ```
         {context}
         ```
@@ -87,6 +75,10 @@ class QueryConverter:
         if "model" in response_json:
             del response_json["model"]
         response_json["model"] = self.model_name
+
+        if "view" in response_json:
+            del response_json["view"]
+        response_json["view"] = 'order_items'
 
         print(f"response_json: {response_json}")
         self.response_json = response_json

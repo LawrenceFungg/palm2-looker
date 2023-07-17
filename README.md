@@ -27,7 +27,7 @@ This repository contains a demo application that uses OpenAI and LangChain to in
     ```bash
     export LOOKER_MODEL_NAME=<your_looker_model_name>
     export LOOKML_DIR=<path_to_your_lookml_directory>
-    export OPENAI_API_KEY=<your_openai_api_key>
+    export LOOKER_APP_TITLE=<the_title_to_be_displayed_in_the_streamlit_app>
     ```
 
 1. Run app.py to start the Streamlit application:
