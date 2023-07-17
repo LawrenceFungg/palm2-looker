@@ -76,9 +76,9 @@ class QueryConverter:
             del response_json["model"]
         response_json["model"] = self.model_name
 
-        if "view" in response_json:
-            del response_json["view"]
-        response_json["view"] = 'order_items'
+        # if "view" in response_json:
+        #     del response_json["view"]
+        # response_json["view"] = 'order_items'
 
         print(f"response_json: {response_json}")
         self.response_json = response_json
