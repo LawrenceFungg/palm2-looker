@@ -7,8 +7,8 @@ This repository contains a demo application that uses OpenAI and LangChain to in
 ## Features
 
 - Retrieve data from Looker by asking questions in English and other languages
-- Utilizes OpenAI and LangChain for language understanding and translation
-- Converts natural language questions into Looker API requests using GPT-3 (text-davinci-003)
+- Utilizes Tensorflow Hub Universal Sentence Encoder and LangChain for language understanding and translation
+- Converts natural language questions into Looker API requests using Palm2 (text-bison-0001)
 - Supports local LookML embeddings
 
 ## Getting Started
