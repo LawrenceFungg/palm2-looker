@@ -1,7 +1,5 @@
 # Looker Data Access with Natural Language using OpenAI and LangChain
 
-![Demo App](images/demo.png)
-
 This repository contains a demo application that uses OpenAI and LangChain to interact with Looker and output data based on natural language questions in English and other languages.
 
 ## Features
